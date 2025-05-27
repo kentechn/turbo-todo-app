@@ -1,40 +1,100 @@
-# Turborepo kitchen sink starter
+# 認証機能付きTodoアプリ
 
-This Turborepo starter is maintained by the Turborepo core team.
+Turborepo、React + Vite、Hono.jsを使用して構築されたフルスタックTodoアプリケーションです。
 
-This example also shows how to use [Workspace Configurations](https://turborepo.com/docs/core-concepts/monorepos/configuring-workspaces).
+## 構成
 
-## Using this example
+このTurborepoモノレポには以下が含まれています：
 
-Run the following command:
+### アプリケーション
+
+- `frontend`: TodoアプリのUIを提供するReact + Vite SPA
+- `backend`: 認証機能を備えたHono.js REST APIサーバー
+
+### 技術スタック
+
+- **フロントエンド**: React, TypeScript, Vite
+- **バックエンド**: Hono.js, TypeScript
+- **ビルドシステム**: Turborepo
+- **パッケージマネージャー**: pnpm
+
+### アーキテクチャ
+
+#### バックエンド
+
+バックエンドはレイヤードアーキテクチャ（Clean Architecture）を採用し、以下の層で構成されています：
+
+- **Domain層**: ビジネスロジックとエンティティを定義
+  - エンティティ（Todo、User）
+  - リポジトリインターフェース
+  - ビジネスルール
+
+- **Application層**: ユースケースとアプリケーションサービス
+  - ユースケース（CreateTodo、UpdateTodo等）
+  - DTOの定義
+
+- **Infrastructure層**: 外部システムとの連携
+  - リポジトリの実装
+  - データベース接続
+  - 外部API連携
+
+- **Presentation層**: HTTPリクエスト/レスポンスの処理
+  - ルーティング
+  - コントローラー
+  - ミドルウェア（認証、エラーハンドリング等）
+
+### 開発手法
+
+- **TDD（テスト駆動開発）**: すべての機能実装はテストファーストで進めます
+  - 単体テスト: 各層のビジネスロジックをテスト
+  - 統合テスト: API エンドポイントのテスト
+  - E2Eテスト: フロントエンドとバックエンドの連携テスト
+
+## はじめに
+
+### 前提条件
+
+- Node.js >= 18
+- pnpm
+
+### インストール
 
 ```sh
-npx create-turbo@latest -e kitchen-sink
+pnpm install
 ```
 
-## What's inside?
+### 開発
 
-This Turborepo includes the following packages and apps:
+すべてのアプリを開発モードで起動：
 
-### Apps and Packages
+```sh
+pnpm dev
+```
 
-- `api`: an [Express](https://expressjs.com/) server
-- `storefront`: a [Next.js](https://nextjs.org/) app
-- `admin`: a [Vite](https://vitejs.dev/) single page app
-- `blog`: a [Remix](https://remix.run/) blog
-- `@repo/eslint-config`: ESLint configurations used throughout the monorepo
-- `@repo/jest-presets`: Jest configurations
-- `@repo/logger`: isomorphic logger (a small wrapper around console.log)
-- `@repo/ui`: a dummy React UI library (which contains `<CounterButton>` and `<Link>` components)
-- `@repo/typescript-config`: tsconfig.json's used throughout the monorepo
+以下のURLでアクセス可能：
+- フロントエンド: http://localhost:5173
+- バックエンド: http://localhost:3000
 
-Each package and app is 100% [TypeScript](https://www.typescriptlang.org/).
+### ビルド
 
-### Utilities
+すべてのアプリをビルド：
 
-This Turborepo has some additional tools already setup for you:
+```sh
+pnpm build
+```
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Jest](https://jestjs.io) test runner for all things JavaScript
-- [Prettier](https://prettier.io) for code formatting
+### その他のコマンド
+
+- `pnpm lint` - すべてのアプリでESLintを実行
+- `pnpm check-types` - TypeScriptの型チェックを実行
+- `pnpm format` - Prettierでコードをフォーマット
+- `pnpm test` - テストを実行
+- `pnpm clean` - ビルド出力とキャッシュをクリーン
+
+## 機能（予定）
+
+- ユーザー認証（登録、ログイン、ログアウト）
+- Todoの作成、読み取り、更新、削除（CRUD）
+- Todoの完了/未完了の切り替え
+- ステータスによるTodoのフィルタリング
+- レスポンシブデザイン

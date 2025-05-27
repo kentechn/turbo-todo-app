@@ -1,7 +1,12 @@
 {
-  "eslint.workingDirectories": [
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "github.copilot.chat.commitMessageGeneration.instructions": [
     {
-      "mode": "auto"
+      "text": "コミットメッセージは、日本語で生成してください"
     }
   ]
+
 }

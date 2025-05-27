@@ -5,20 +5,11 @@
     "build": {
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "dependsOn": ["^build"],
-      "outputs": [
-        "build/**",
-        ".vercel/**",
-        "dist/**",
-        ".next/**",
-        "!.next/cache/**"
-      ]
+      "outputs": ["build/**", "dist/**"]
     },
     "test": {
       "outputs": ["coverage/**"],
       "dependsOn": []
-    },
-    "lint": {
-      "dependsOn": ["^build", "^lint"]
     },
     "check-types": {
       "dependsOn": ["^build", "^check-types"]
