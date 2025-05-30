@@ -11,11 +11,14 @@
     "@hono/swagger-ui": "^0.5.1",
     "@hono/zod-openapi": "^0.19.6",
     "@hono/zod-validator": "^0.5.0",
+    "@prisma/client": "6.8.2",
     "hono": "^4.7.10",
-    "zod": "^3.25.28"
+    "zod": "^3.25.28",
+    "zod-prisma-types": "^3.2.4"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
+    "prisma": "^6.8.2",
     "tsx": "^4.7.1",
     "typescript": "^5.8.3"
   }
