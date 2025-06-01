@@ -19,3 +19,11 @@ export const getUserById = async (id: number) => {
   }
   return user;
 }
+
+export const deleteUserById = async (id: number) => {
+  const user = await usersRepository.delete(id);
+  if (!user) {
+    throw new NotFoundError(`User with id ${id}`);
+  }
+}
+

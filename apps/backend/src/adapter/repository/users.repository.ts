@@ -34,6 +34,22 @@ export const usersRepository = {
           throw new BadRequestError("User with this email already exists.", error.stack);
         }
       }
+      throw error
+    }
+  },
+  async delete(id: number) {
+    try {
+      return await db.user.delete({
+          where: { id },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        // Handle specific Prisma errors
+        if (error.code === 'P2025') {
+          throw new BadRequestError("User not found.", error.stack);
+        }
+      }
+      throw error; // Re-throw other errors
     }
 
   }

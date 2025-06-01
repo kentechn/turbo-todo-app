@@ -72,3 +72,20 @@ export const createUserRoute = createRoute({
   summary: "Create user endpoint",
   description: "Creates a new user in the system",
 })
+
+export const deleteUserRoute = createRoute({
+  method: "delete",
+  path: '/{id}',
+  request: {
+    params: GetUserParamsSchema
+  },
+  responses: {
+    204: {
+      description: "User deleted successfully",
+    },
+    ...commonErrorResponses
+  },
+  tags: ["users"],
+  summary: "Delete user by ID endpoint",
+  description: "Deletes a user by their ID",
+})

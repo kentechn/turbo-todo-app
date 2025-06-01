@@ -1,7 +1,7 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { defaultHook } from "../utils/defaultHook.js";
-import { getUsersRoute, createUserRoute, getUserRoute } from "../openapi/users.js";
-import { getUsers, createUser, getUserById } from "../../kernel/usecase/user.usecase.js";
+import { getUsersRoute, createUserRoute, getUserRoute, deleteUserRoute } from "../openapi/users.js";
+import { getUsers, createUser, getUserById, deleteUserById } from "../../kernel/usecase/user.usecase.js";
 import { NotFoundError } from "../../kernel/errors/index.js";
 
 const usersRouter = new OpenAPIHono({
@@ -30,6 +30,13 @@ usersRouter.openapi(createUserRoute, async (c) => {
 
   const user = await createUser(body);
   return c.json(user, 201);
+})
+
+usersRouter.openapi(deleteUserRoute, async (c) => {
+  const userId = c.req.param("id");
+  const user = await deleteUserById(Number(userId));
+
+  return new Response(null, { status: 204 });
 })
 
 
