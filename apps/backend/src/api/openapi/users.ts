@@ -89,3 +89,33 @@ export const deleteUserRoute = createRoute({
   summary: "Delete user by ID endpoint",
   description: "Deletes a user by their ID",
 })
+
+export const updateUserRoute = createRoute({
+  method: "put",
+  path: '/{id}',
+  request: {
+    params: GetUserParamsSchema,
+    body: {
+      content: {
+        "application/json": {
+          schema: UserCreateInputSchema, // Assuming the request body schema is similar to the response
+        },
+      },
+      required: true,
+    },
+  },
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: UserSchema,
+        },
+      },
+      description: "User updated successfully",
+    },
+    ...commonErrorResponses
+  },
+  tags: ["users"],
+  summary: "Update user by ID endpoint",
+  description: "Updates a user by their ID",
+})

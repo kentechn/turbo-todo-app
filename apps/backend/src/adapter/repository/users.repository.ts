@@ -51,6 +51,5 @@ export const usersRepository = {
       }
       throw error; // Re-throw other errors
     }
-
-  }
+  },
 }

@@ -15,3 +15,6 @@ export const UserCreateInputSchema = UserSchema.omit({
   updatedAt: true
 })
 export type UserCreateInput = z.infer<typeof UserCreateInputSchema>;
+
+export const UserUpdateInputSchema = UserCreateInputSchema.partial();
+export type UserUpdateInput = z.infer<typeof UserUpdateInputSchema>;
