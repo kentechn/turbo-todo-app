@@ -1,8 +1,31 @@
-import { createRoute } from "@hono/zod-openapi";
+import { createRoute, z } from "@hono/zod-openapi";
 import { commonErrorResponses } from "./common.js";
-import { GetUsersResponseSchema } from "../schemas/users.js";
+import { GetUserParamsSchema, GetUsersResponseSchema } from "../schemas/users.js";
+import { UserCreateInputSchema, UserSchema } from "../../kernel/schema/user.schema.js";
 
-export const usersRoute = createRoute({
+export const getUserRoute = createRoute({
+  method: "get",
+  path: '/{id}',
+  request: {
+    params: GetUserParamsSchema
+  },
+  responses: {
+    200: {
+      content: {
+        "application/json": {
+          schema: UserSchema,
+        },
+      },
+      description: "User details",
+    },
+    ...commonErrorResponses
+  },
+  tags: ["users"],
+  summary: "Get user by ID endpoint",
+  description: "Returns details of a user by their ID",
+})
+
+export const getUsersRoute = createRoute({
   method: "get",
   path: "/",
   responses: {
@@ -20,3 +43,32 @@ export const usersRoute = createRoute({
   summary: "List users endpoint",
   description: "Returns a list of users in the system",
 });
+
+export const createUserRoute = createRoute({
+  method: "post",
+  path: "/",
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: UserCreateInputSchema, // Assuming the request body schema is similar to the response
+        },
+      },
+      required: true,
+    },
+  },
+  responses: {
+    201: {
+      content: {
+        "application/json": {
+          schema: UserSchema,
+        },
+      },
+      description: "User created successfully",
+    },
+    ...commonErrorResponses
+  },
+  tags: ["users"],
+  summary: "Create user endpoint",
+  description: "Creates a new user in the system",
+})

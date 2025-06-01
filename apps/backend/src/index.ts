@@ -1,17 +1,24 @@
 import { serve } from "@hono/node-server";
 import { OpenAPIHono, z, type Hook } from "@hono/zod-openapi";
 import { swaggerUI } from "@hono/swagger-ui";
-import { HTTPException } from "hono/http-exception";
-import health from "./api/routes/health.js";
+import healthRouter from "./api/routes/health.js";
 import { AppError } from "./kernel/errors/AppError.js";
 import { ValidationError } from "./kernel/errors/index.js";
-import { mapZodError } from "./api/utils/zodErrorMapper.js";
-import type { Env } from "hono";
 import { defaultHook } from "./api/utils/defaultHook.js";
 
+import { logger } from 'hono/logger'
+import usersRouter from "./api/routes/users.js";
 
 export const app = new OpenAPIHono({ defaultHook })
   .basePath("/api");
+
+app.use(logger())
+
+app.use("*", async (c, next) => {
+  console.log(`Request: ${c.req.method} ${c.req.url}`);
+
+  await next();
+})
 
 // Error handler
 app.onError((err, c) => {
@@ -38,11 +45,7 @@ app.onError((err, c) => {
   )
 });
 
-app.get("/", (c) => {
-  return c.text("Hello Hono!");
-});
 
-app.route("/health", health);
 
 // OpenAPI documentation endpoint
 app.doc("/openapi.json", {
@@ -56,6 +59,9 @@ app.doc("/openapi.json", {
 
 // Swagger UI
 app.get("/docs", swaggerUI({ url: "/api/openapi.json" }));
+
+app.route("/health", healthRouter);
+app.route("/users", usersRouter)
 
 serve(
   {

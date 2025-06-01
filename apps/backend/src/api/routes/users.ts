@@ -1,17 +1,21 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { healthRoute } from "../openapi/health.js";
-import { z } from "zod";
-import { mapZodError } from "../utils/zodErrorMapper.js";
-import { HTTPException } from "hono/http-exception";
 import { defaultHook } from "../utils/defaultHook.js";
-import { usersRoute } from "../openapi/users.js";
-import { getUsers } from "../../kernel/usecase/user.usecase.js";
+import { getUsersRoute, createUserRoute, getUserRoute } from "../openapi/users.js";
+import { getUsers, createUser, getUserById } from "../../kernel/usecase/user.usecase.js";
+import { NotFoundError } from "../../kernel/errors/index.js";
 
 const usersRouter = new OpenAPIHono({
   defaultHook
 });
 
-usersRouter.openapi(usersRoute, async (c) => {
+usersRouter.openapi(getUserRoute, async (c) => {
+  const userId = c.req.param("id");
+  const user = await getUserById(Number(userId));
+
+  return c.json(user, 200);
+})
+
+usersRouter.openapi(getUsersRoute, async (c) => {
   const users = await getUsers();
 
   const res = {
@@ -19,7 +23,15 @@ usersRouter.openapi(usersRoute, async (c) => {
   }
 
   return c.json(res, 200);
-
 });
 
-export default usersRoute;
+usersRouter.openapi(createUserRoute, async (c) => {
+  const body = c.req.valid("json")
+
+  const user = await createUser(body);
+  return c.json(user, 201);
+})
+
+
+
+export default usersRouter;

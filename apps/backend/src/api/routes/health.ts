@@ -5,14 +5,14 @@ import { mapZodError } from "../utils/zodErrorMapper.js";
 import { HTTPException } from "hono/http-exception";
 import { defaultHook } from "../utils/defaultHook.js";
 
-const health = new OpenAPIHono({
+const healthRouter = new OpenAPIHono({
   defaultHook
 });
 
-health.openapi(healthRoute, (c) => {
+healthRouter.openapi(healthRoute, (c) => {
   return c.json({
     status: "ok" as const,
   }, 200);
 });
 
-export default health;
+export default healthRouter;

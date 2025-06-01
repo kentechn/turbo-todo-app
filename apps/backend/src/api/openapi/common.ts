@@ -1,4 +1,3 @@
-import { z } from "@hono/zod-openapi";
 import { ErrorResponseSchema, ValidationErrorResponseSchema } from "../schemas/common.js";
 
 
@@ -7,7 +6,7 @@ export const commonErrorResponses = {
   400: {
     content: {
       "application/json": {
-        schema: ValidationErrorResponseSchema,
+        schema: ValidationErrorResponseSchema || ErrorResponseSchema,
       },
     },
     description: "Bad Request - Invalid input parameters",

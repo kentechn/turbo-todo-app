@@ -6,7 +6,10 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+}
+
+generator zod {
+  provider       = "zod-prisma-types"
 }
 
 datasource db {
@@ -14,19 +17,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
+model Todo {
   id        Int      @id @default(autoincrement())
   title     String   @db.VarChar(255)
-  createdAt DateTime @default(now()) @db.Timestamp(6)
-  content   String?
-  published Boolean  @default(false)
+  description String? @db.Text
+  createdAt DateTime @default(now()) @db.Timestamp(6) @map("created_at")
+  updatedAt DateTime @updatedAt @db.Timestamp(6) @map("updated_at")
+  completed Boolean  @default(false)
   authorId  Int
   author      User     @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model User {
   id      Int      @id @default(autoincrement())
-  name    String?  @db.VarChar(255)
   email   String   @unique @db.VarChar(255)
-  Post    Post[]
+  Todos    Todo[]
+  createdAt DateTime @default(now()) @db.Timestamp(6) @map("created_at")
+  updatedAt DateTime @updatedAt @db.Timestamp(6) @map("updated_at")
+  name    String?  @db.VarChar(255)
 }
